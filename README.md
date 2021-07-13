@@ -61,24 +61,12 @@ to your needs:
 #define ANDROID_MAKE_JOBS   16
 ```
 
-The preprocessor is a clang plugin, so building it requires more effort. First, copy the
-[preprocessor](./src/preprocessor) directory under
-`$LLVM_SRC/tools/clang/tools` and change the directory name to fuzzgen, add the following line in 
-`$LLVM_SRC/tools/clang/tools/CMakeLists.txt`:
-```
-add_clang_subdirectory(fuzzgen)
-```
-
-Then, build the LLVM again. The preprocessor plugin will show up under
-`$BUILD_LLVM_DIR/bin` directory.
-
-
 ### Running the PreProcessor
 
 The first step to run *FuzzGen*, is to generate the metadata file. To do this,
 run the preprocessor as follows:
 ```
-    $BUILD_LLVM_DIR/bin/fuzzgen-preprocessor       \
+    fuzzgen-preprocessor       \
         -outfile=$LIBNAME.meta                     \
         -library-root=/path/to/Android/home/       \ 
         $(find /path/to/all/library/source/files/) \

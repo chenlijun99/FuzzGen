@@ -13,22 +13,50 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-cmake_minimum_required(VERSION 3.4.3)
+cmake_minimum_required(VERSION 3.13)
 project(FuzzGenPreprocessor)
 
+find_package(LLVM 6.0.0 REQUIRED CONFIG)
+
+include_directories(${LLVM_INCLUDE_DIRS})
+link_directories(${LLVM_LIBRARY_DIRS})
+add_definitions(${LLVM_DEFINITIONS})
 
 set(LLVM_LINK_COMPONENTS ${LLVM_TARGETS_TO_BUILD} asmparser support mc)
+llvm_map_components_to_libnames(llvm_libs ${LLVM_LINK_COMPONENTS})
 
-add_clang_executable(fuzzgen-preprocessor preprocessor.cpp)
-
-target_link_libraries(fuzzgen-preprocessor
-    PRIVATE
-    clangAST
-    clangBasic
-    clangCrossTU
-    clangFrontend
-    clangIndex
-    clangTooling
+set(TARGET_NAME fuzzgen-preprocessor)
+add_executable(${TARGET_NAME} preprocessor.cpp)
+set_target_properties(${TARGET_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
 
-install(TARGETS fuzzgen-preprocessor RUNTIME DESTINATION bin)
+target_link_libraries(${TARGET_NAME}
+	PRIVATE
+	LLVM
+	clangBasic
+	clangFrontend
+	clangAST
+	clangAnalysis
+	clangBasic
+	clangDriver
+	clangEdit
+	clangFrontend
+	clangFrontendTool
+	clangLex
+	clangParse
+	clangSema
+	clangEdit
+	clangCrossTU
+	clangIndex
+	clangSerialization
+	clangToolingCore
+	clangTooling
+	${llvm_libs}
+)
+target_compile_options(${TARGET_NAME}
+	PRIVATE
+	-std=c++0x
+	)
+install(TARGETS ${TARGET_NAME} RUNTIME DESTINATION bin)
+

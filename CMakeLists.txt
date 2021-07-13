@@ -67,3 +67,5 @@ target_link_libraries(fuzzgen ${llvm_libs}) # clang)
 
 
 message(STATUS "Libs: ${llvm_libs}")
+
+add_subdirectory(src/preprocessor)
