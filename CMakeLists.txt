@@ -20,7 +20,7 @@ project(FuzzGen)
 set(LLVM_INCLUDE_DIRS /home/ispo/GIANT/build-llvm)
 
 
-find_package(LLVM REQUIRED CONFIG)
+find_package(LLVM 6.0.0 REQUIRED CONFIG)
 find_package(Boost REQUIRED)
 
 if(NOT Boost_FOUND)
